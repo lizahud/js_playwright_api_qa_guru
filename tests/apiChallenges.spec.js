@@ -3,17 +3,14 @@ import { faker } from '@faker-js/faker';
 
 test.describe("API challenge", () => {
   let URL = "https://apichallenges.herokuapp.com/";
-//   let token;
-  let new_token;
-  const token = 'fca52194-e5b1-4e41-9248-caf66a86adff'
+  let token;
 
-//   test.beforeAll(async ({ request }) => {
-//     let response = await request.post(`${URL}challenger`);
-//     let headers = await response.headers();
-//     token = headers["x-challenger"];
-//     console.log('Это токен: ' + token);
-//     );
-//   });
+  test.beforeAll(async ({ request }) => {
+    let response = await request.post(`${URL}challenger`);
+    let headers = await response.headers();
+    token = headers["x-challenger"];
+    console.log('Это токен: ' + token);
+  });
 
   test("GET /challenges (200)", {tag: ['@id_02', '@GET']}, async ({ request }) => {
     let response = await request.get(`${URL}challenges`, {
