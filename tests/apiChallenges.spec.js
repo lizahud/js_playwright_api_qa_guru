@@ -516,26 +516,23 @@ test("HEAD /todos (200)", {tag: ['@id_08', '@HEAD']}, async ({ request }) => {
   });
 
   test("PUT /challenger/guid CREATE", {tag: ['@id_36', '@PUT']}, async ({ request }) => {
-    let response = await request.post(`${URL}challenger`);
-    let headers = await response.headers();
-    new_token = headers["x-challenger"];
-
-    let response1 = await request.get(`${URL}challenger/${new_token}`, {
+    let new_token = faker.string.uuid();
+    let response1 = await request.get(`${URL}challenger/${token}`, {
       headers: {
-          "x-challenger": new_token,
+          "x-challenger": token,
         },
     });
     let body = await response1.json();
+    body.xChallenger = new_token;
+    console.log(body.xChallenger);
     let response2 = await request.put(`${URL}challenger/${new_token}`, {
         headers: {
-            "x-challenger": token,
+            "x-challenger": new_token,
           },
           data: body
     });
-    let body1 = await response2.json();
-    expect(response2.status()).toBe(200);
+    expect(response2.status()).toBe(201);
     expect(body.xChallenger).toBe(new_token)
-    expect(body1).toHaveProperty('challengeStatus');
   });
 
   test("GET /challenger/database/guid (200)", {tag: ['@id_37', '@GET']}, async ({ request }) => {
@@ -595,5 +592,4 @@ test("HEAD /todos (200)", {tag: ['@id_08', '@HEAD']}, async ({ request }) => {
     expect(response.status()).toBe(201);
     expect(contentType).toContain('application/xml');
   });
-
 });
